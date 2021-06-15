@@ -48,9 +48,9 @@ The dataset generation pipeline consumes the cache.
 
 To reproduce the workflow, the steps below should be followed:
 
-1. Install [Node.js (version v14.16.1 or higher)](https://nodejs.org/en/)
+1. Install [Node.js (minimum v14.16.1)](https://nodejs.org/en/)
 2. Install dependencies: run `npm install` in the project root folder.
-3. In the root folder create a folder `./cache/` , unzip `KeySearchWiki-cache.zip` and put the content of the inner folder `cache-backup-V2` in the created `cache` folder.
+3. In the root folder create a folder `./cache/`, unzip `KeySearchWiki-cache.zip` in  `cache` folder.
 4. To generate the raw entries run `npm run generateCandidate` in the root folder. The output files can be found under `./dataset/` . In addition to log files (debugging), statistics files, the pipeline initial output is: `./dataset/raw-data.json`.
 5. To generate the intermediate entries run `npm run cleanCandidate` in the root folder. Find the output entries under: `./dataset/intermediate-dataset.json`.
 6. To generate the native entries run `npm run generateNativeEntry` in the root folder. Find the output entries under: `./dataset/native-dataset.json` (together with statistics (dataset characteristics) and metrics (Filtering criteria) files).
