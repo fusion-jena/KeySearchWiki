@@ -26,7 +26,7 @@ The KeySearchWiki dataset is published on [Zenodo](https://doi.org/10.5281/zenod
 | `relevantEntities` | Entities that are relevant results to the query given by their Wikidata IRI and label | `{"iri":"Q16904614","label":"Zoological Garden of Monaco"}` as relevant result to the query `Europe zoo` |
 
 - `KeySearchWiki-queries-label.txt`: A text file containing the queries. Each line containing space-seperated queryID and query: `MK18808 programmer University of Houston human`.
-- `KeySearchWiki-queries-iri.txt`: A text file containing queries, each line contains space-seperated queryID and IRIs of query elements: `MK18808 Q5482740 Q1472358 Q5` (could be be directly used by systems that omit a preceding [Entity Linking](https://en.wikipedia.org/wiki/Entity_linking) step).
+- `KeySearchWiki-queries-iri.txt`: A text file containing queries, each line contains space-seperated queryID and IRIs of query elements: `MK18808 Q5482740 Q1472358 Q5` (could be be directly used by systems that omit a preceding [Entity Linking](https://link.springer.com/content/pdf/10.1007%2F978-3-319-93935-3_5.pdf) step).
 - `KeySearchWiki-qrels-trec.txt`: A text file containing relevant entities in the [TREC format](https://trec.nist.gov/data/qrels_eng/): `MK18808 0 Q92877 1`.
 
 ### Examples
