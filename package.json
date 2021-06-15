@@ -1,0 +1,64 @@
+{
+  "name": "KeySearchWiki-generation-workflow",
+  "version": "1.0.0",
+  "description": "Source code for generating KeySearchWiki - An Automatically Generated Dataset for Keyword Search over Wikidata",
+"keywords": [
+  "Keyword Search",
+  "Knowledge Graph",
+  "Dataset",
+  "Wikidata",
+  "Wikipedia"
+],
+
+  "scripts": {
+    "generateCandidate": "babel-node --max-old-space-size=16384 src/workflow/generateCandidate.js",
+    "cleanCandidate": "babel-node --max-old-space-size=16384 src/workflow/cleanCandidate.js",
+    "generateNativeEntry": "babel-node --max-old-space-size=16384 src/workflow/generateNativeEntry.js",
+    "generateKeywordIndex": "babel-node --max-old-space-size=16384 src/workflow/generateKeywordIndex.js",
+    "generateNewEntryHop": "babel-node --max-old-space-size=16384 src/workflow/generateNewEntryHop.js",
+    "generateNewEntryKW": "babel-node --max-old-space-size=16384 src/workflow/generateNewEntryKW.js",
+    "mergeEntries": "babel-node --max-old-space-size=16384 src/workflow/mergeEntries.js",
+    "generateStatMerged": "babel-node --max-old-space-size=16384 src/workflow/generateStatMerged.js",
+    "diversifyEntries": "babel-node --max-old-space-size=16384 src/workflow/diversifyEntries.js",
+    "generateStatFinal": "babel-node --max-old-space-size=16384 src/workflow/generateStatFinal.js",
+    "generateFinalFormat": "babel-node --max-old-space-size=16384 src/workflow/generateFinalFormat.js",
+    "generatePlots": "babel-node --max-old-space-size=16384 src/workflow/generatePlots.js",
+    "compareSPARQL": "babel-node --max-old-space-size=16384 src/workflow/compareSPARQL.js",
+
+    "build": "babel src --out-dir dist",
+    "debug:instance2cat": "babel-node src/debug/instance2cat.js"
+  },
+  "author": {
+      "name": "Leila Feddoul",
+      "email": "Leila.Feddoul@uni-jena.de",
+      "url": "https://orcid.org/0000-0001-8896-8208"
+    },
+    "contributors": [
+    {
+      "name": "Sirko Schindler",
+    "email": "Sirko.Schindler@dlr.de",
+    "url": "https://orcid.org/0000-0002-0964-4457"
+    }
+  ],
+
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/register": "^7.8.6"
+  },
+  "dependencies": {
+    "JSONStream": "^1.3.5",
+    "better-sqlite3": "^7.1.2",
+    "bunyan": "^1.8.15",
+    "cli-progress": "^3.9.0",
+    "cross-fetch": "^3.0.4",
+    "mkdirp": "^1.0.4",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=v14.16.1"
+  }
+}
