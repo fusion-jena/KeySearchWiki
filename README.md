@@ -71,4 +71,4 @@ To generate those chart, first run `npm run compareSPARQL`. After the process ha
 <!---## Cite , consider updating codemeta with paper link and also zenodo metadata-->
 
 ## License
-This project is licensed under the [MIT License](link to license file).
+This project is licensed under the [MIT License](https://github.com/fusion-jena/KeySearchWiki/blob/master/LICENSE).
