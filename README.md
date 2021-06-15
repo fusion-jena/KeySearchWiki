@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/376782518.svg)](https://zenodo.org/badge/latestdoi/376782518)
+
 # KeySearchWiki
 ## An Automatically Generated Dataset for Keyword Search over Wikidata
 KeySearchWiki is a dataset for evaluating keyword search systems over [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page).
