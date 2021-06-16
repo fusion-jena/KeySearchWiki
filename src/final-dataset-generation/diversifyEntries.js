@@ -86,7 +86,7 @@ export default function diversifyEntries(fs){
               candidate.push(entriesMap.get(can));
             });
 
-            candidate.sort((a, b) => (a.coverage < b.coverage) ? 1 : -1);
+            candidate.sort((a, b) => (a.metrics.coverage < b.metrics.coverage) ? 1 : -1);
             datasetArray.push(candidate[0]);
           }
         }

@@ -21,23 +21,23 @@ The KeySearchWiki dataset is published on [Zenodo](https://doi.org/10.5281/zenod
 
 | Property | Description | Example |
 | --- | --- | --- |
-| `queryID` | Unique identifier of the query given by `prefix-number`, where prefix = [NT (native), MK (multi-keyword), or MH (multi-hop)] | `NT12986`, `MK18808`, `MH76`|
+| `queryID` | Unique identifier of the query given by `prefix-number`, where prefix = [NT (native), MK (multi-keyword), or MH (multi-hop)] | `NT13797`, `MK64319`, `MH87`|
 | `query` | Natural language query in this form: <keyword1 keyword2 ... target>| `female Germany television actor human` |
 | `keywords` | IRIs of the entities (or literals) corresponding to the keywords in Wikidata, together with their labels, types and a boolean indicator `isiri`. If the keyword is literal `isiri = false`, if it is an IRI `isiri = true` | `{"iri":"Q183","label":"Germany","isiri":"true","types":[{"type":"Q6256","typeLabel":"country"},{"type":"Q43702","typeLabel":"federation"},{"type":"Q3624078","typeLabel":"sovereign state"},{"type":"Q63791824","typeLabel":"countries bordering the Baltic Sea"}]`|
 | `target` | Type of entities to retrieve given by its Wikidata IRI and label | `{"iri":"Q5","label":"human"}` |
 | `relevantEntities` | Entities that are relevant results to the query given by their Wikidata IRI and label | `{"iri":"Q16904614","label":"Zoological Garden of Monaco"}` as relevant result to the query `Europe zoo` |
 
-- `KeySearchWiki-queries-label.txt`: A text file containing the queries. Each line containing space-seperated queryID and query: `MK18808 programmer University of Houston human`.
-- `KeySearchWiki-queries-iri.txt`: A text file containing queries, each line contains space-seperated queryID and IRIs of query elements: `MK18808 Q5482740 Q1472358 Q5` (could be be directly used by systems that omit a preceding [Entity Linking](https://link.springer.com/content/pdf/10.1007%2F978-3-319-93935-3_5.pdf) step).
-- `KeySearchWiki-qrels-trec.txt`: A text file containing relevant entities in the [TREC format](https://trec.nist.gov/data/qrels_eng/): `MK18808 0 Q92877 1`.
+- `KeySearchWiki-queries-label.txt`: A text file containing the queries. Each line containing space-seperated queryID and query: `MK64319 programmer University of Houston human`.
+- `KeySearchWiki-queries-iri.txt`: A text file containing queries, each line contains space-seperated queryID and IRIs of query elements: `MK64319 Q5482740 Q1472358 Q5` (could be be directly used by systems that omit a preceding [Entity Linking](https://link.springer.com/content/pdf/10.1007%2F978-3-319-93935-3_5.pdf) step).
+- `KeySearchWiki-qrels-trec.txt`: A text file containing relevant entities in the [TREC format](https://trec.nist.gov/data/qrels_eng/): `MK64319 0 Q92877 1`.
 
 ### Examples
 
 | queryID | query | keywords | target | relevantEntities
 | --- | --- | --- | --- | --- |
-| NT12986 | female Germany television actor human | female(Q6581072), Germany(Q183), television actor(Q10798782) | human(Q5) | e.g., Q100220, Q100269|
-| MK18808 | programmer University of Houston human | programmer(Q5482740), University of Houston(Q1472358)| human(Q5) | e.g., Q92877, Q6847972|
-| MH76 | World Music Awards album | World Music Awards(Q375990) | album(Q482994) | e.g., Q1351397, Q4802828|
+| NT13797 | female Germany television actor human | female(Q6581072), Germany(Q183), television actor(Q10798782) | human(Q5) | e.g., Q100220, Q100269|
+| MK64319 | programmer University of Houston human | programmer(Q5482740), University of Houston(Q1472358)| human(Q5) | e.g., Q92877, Q6847972|
+| MH87 | World Music Awards album | World Music Awards(Q375990) | album(Q482994) | e.g., Q1351397, Q4802828|
 
 ## Reproduce dataset generation
 ### Dataset generation workflow
@@ -45,13 +45,13 @@ The dataset generation workflow is illustrated in the following figure (see pape
 
 ![approach!](figs/approach.png)
 
-The dataset is accompanied with cache files ([KeySearchWiki-cache.zip](https://doi.org/10.5281/zenodo.4946914)), a collection of SQLite database files containing all data retrieved either from Wikidata/Wikimedia endpoints via SPARQL/[MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) in the candidate generation step during the period from February to April 2021.
+The dataset is accompanied with cache files ([KeySearchWiki-cache.zip](https://doi.org/10.5281/zenodo.4965398)), a collection of SQLite database files containing all data retrieved either from Wikidata/Wikimedia endpoints via SPARQL/[MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) in the candidate generation step during the period from February to April 2021.
 The dataset generation pipeline consumes the cache.
 
 To reproduce the workflow, the steps below should be followed:
 
 1. Install [Node.js (minimum v14.16.1)](https://nodejs.org/en/)
-2. Install dependencies: run `npm install` in the project root folder.
+2. First download the repository and install dependencies: run `npm install` in the project root folder.
 3. In the root folder create a folder `./cache/`, unzip `KeySearchWiki-cache.zip` in  `cache` folder.
 4. To generate the raw entries run `npm run generateCandidate` in the root folder. The output files can be found under `./dataset/` . In addition to log files (debugging), statistics files, the pipeline initial output is: `./dataset/raw-data.json`.
 5. To generate the intermediate entries run `npm run cleanCandidate` in the root folder. Find the output entries under: `./dataset/intermediate-dataset.json`.
