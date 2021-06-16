@@ -45,7 +45,7 @@ The dataset generation workflow is illustrated in the following figure (see pape
 
 ![approach!](figs/approach.png)
 
-The dataset is accompanied with cache files ([KeySearchWiki-cache.zip](https://doi.org/10.5281/zenodo.4965398)), a collection of SQLite database files containing all data retrieved either from Wikidata/Wikimedia endpoints via SPARQL/[MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) in the candidate generation step during the period from February to April 2021.
+The dataset is accompanied with cache files ([KeySearchWiki-cache.zip](https://doi.org/10.5281/zenodo.4965398), a collection of SQLite database files containing all data retrieved either from Wikidata/Wikimedia endpoints via SPARQL/[MediaWiki API](https://www.mediawiki.org/wiki/API:Main_page) in the candidate generation step during the period from February to April 2021.
 The dataset generation pipeline consumes the cache.
 
 To reproduce the workflow, the steps below should be followed:
