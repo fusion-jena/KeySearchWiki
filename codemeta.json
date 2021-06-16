@@ -5,12 +5,12 @@
     "codeRepository": "https://github.com/fusion-jena/KeySearchWiki",
     "dateCreated": "2021-06-14",
     "datePublished": "2021-06-14",
-    "dateModified": "2021-06-14",
-    "downloadUrl": "https://doi.org/10.5281/zenodo.4959183",
+    "dateModified": "2021-06-16",
+    "downloadUrl": "https://doi.org/10.5281/zenodo.4967716",
     "issueTracker": "https://github.com/fusion-jena/KeySearchWiki/issues",
     "name": "KeySearchWiki-generation-workflow",
-    "version": "1.0.0",
-    "identifier": "10.5281/zenodo.4959183",
+    "version": "1.0.1",
+    "identifier": "10.5281/zenodo.4967716",
     "description": "Source code for generating KeySearchWiki - An Automatically Generated Dataset for Keyword Search over Wikidata",
     "referencePublication": "",
     "funder": {
@@ -35,7 +35,7 @@
     ],
     "relatedLink": [
         "https://doi.org/10.5281/zenodo.4955200",
-		"https://doi.org/10.5281/zenodo.4946914"
+		"https://doi.org/10.5281/zenodo.4965398"
     ],
     "author": [
         {

@@ -1,6 +1,6 @@
 {
   "name": "KeySearchWiki-generation-workflow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Source code for generating KeySearchWiki - An Automatically Generated Dataset for Keyword Search over Wikidata",
 "keywords": [
   "Keyword Search",
