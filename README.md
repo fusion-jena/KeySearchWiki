@@ -66,9 +66,9 @@ Note that some steps will take a long time. Consider waiting till each process h
 ### Dataset characteristics and analysis
 One could be interested in producing some charts (ones in paper) to have more insights about the dataset characteristics and specially about how the used metrics are distributed over the final entries (coverage, number of relevant entities, and number of query terms (keyword+target), see paper for more details).
 
-Another interesting point is to analysis relevant entities produced via SPARQL and their counterparts in KeySearchWiki dataset (see Limitations section in paper).
+Another interesting point is to analyse relevant entities produced via SPARQL and their counterparts in KeySearchWiki dataset (see Limitations section in paper).
 
-To generate those chart, first run `npm run compareSPARQL`. After the process has finished, run `npm run generatePlots` generatePlots to generate all charts. Find them under `./charts/`.
+To generate those charts, first run `npm run compareSPARQL`. After the process has finished, run `npm run generatePlots` to generate all charts. Find them under `./charts/`.
 
 <!---## Cite , consider updating codemeta with paper link and also zenodo metadata-->
 
