@@ -243,8 +243,11 @@ Then, for each query type and for each query, a search request is sent to the El
 A list of ranked relevant entities (refer to Section 4.5 in [G. Kadilierakis et al.](https://link.springer.com/chapter/10.1007%2F978-3-030-49461-2_8)) is returned and the results are written in the TREC results format: `<queryID> Q0 <RetrievedEntityIRI> <rank> <score> <runID>`.
 The resulted runs are under: `KeySearchWiki-experiments/runs` in [KeySearchWiki-experiments](https://doi.org/10.5281/zenodo.5761138).
 
-After all runs are generated, each run and its corresponding qrels file are given as input to the standard [trec_eval](https://trec.nist.gov/trec_eval) tool to calculate the Mean Average Precision (MAP) and the Precision at rank 10 (P@10).
-The evaluation pipeline is run by using the command `npm run runEval` (output under `./experiments`)
+After all runs are generated, each run and its corresponding qrels file are given as input to the standard [trec_eval](https://github.com/usnistgov/trec_eval/releases/tag/v9.0.7) tool to calculate the Mean Average Precision (MAP) and the Precision at rank 10 (P@10).
+To run the evaluation pipeline follow the steps below:
+1. Download the [trec_eval v9.0.7](https://github.com/usnistgov/trec_eval/releases/download/v9.0.7/trec_eval-9.0.7.tar.gz).
+2. Unzip the tool in `./src/experiments/trec-tool/trec_eval-9.0.7` (after folders creation), and compile it by typing `make` in the command line.
+3. Run the evaluation using `npm run runEval` (output under `./experiments`).
 Evaluation results are found under: `KeySearchWiki-experiments/results` in [KeySearchWiki-experiments](https://doi.org/10.5281/zenodo.5761138).
 
 ### Results
