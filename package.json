@@ -60,6 +60,7 @@
     "cross-fetch": "^3.0.4",
     "glob": "^7.2.0",
     "glob-promise": "^4.2.0",
+    "lodash": "^4.17.21",
     "mariadb": "^2.5.4",
     "mkdirp": "^1.0.4",
     "path": "^0.12.7",
