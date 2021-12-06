@@ -1,6 +1,9 @@
 import path from 'path';
 
-export default {
+const Config = {
+
+  // enable/disable sending requests to endpoint
+  endpointEnabled: false,
 
   // maximum parallel queries
   maxParallelQueries:   5,
@@ -81,9 +84,24 @@ export default {
   //cache database files
   cachePath: path.join(__dirname,'..', '..','/cache/'),
 
+
+  //dowload location for wikipedia dumps
+  downloadPath: path.join(__dirname,'..', '..','/wikipedia-dump/'),
+
   //logs
   apiErrorLog: path.join(__dirname,'..', '..','/dataset/api-errors-log.log'),
   pipelineLog: path.join(__dirname,'..', '..','/dataset/pipeline-log.log'),
   wikipediaHitLog: path.join(__dirname,'..', '..','/dataset/wikipedia-hit-log.log'),
 
+  cachePopLog: path.join(__dirname,'..', '..','/cache/global-cache-population-log.log'),
+  wikipediaCachePopLog: path.join(__dirname,'..', '..','/cache/wikipedia-cache-population-log.log'),
+  downloadLog: path.join(__dirname,'..', '..','/wikipedia-dump/download-log.log'),
+
 };
+export default Config;
+
+
+// make sure all paths actually exist
+import mkdirp from 'mkdirp';
+['outputGS', 'plotMetric', 'eval', 'cachePath','downloadPath' ]
+  .map( (prop) => mkdirp.sync( Config[ prop ] ) );

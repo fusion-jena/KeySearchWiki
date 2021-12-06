@@ -9,16 +9,16 @@ export default function extractTargetKeyword(sparql) {
   //extract all entities
   let entities = sparql.match(/wd:Q[0-9]*/g) ;
 
-  // replace wd prefix with actual iri
+  //replace wd: prefix
   entities.forEach((item, index) => {
-    entities[index] = item.replace('wd:', 'http://www.wikidata.org/entity/');
+    entities[index] = item.replace('wd:', '');
   });
 
   //extract instance triple
   let instance = sparql.match(/wdt:P31 wd:Q[0-9]*/g) ;
 
   //extract target
-  let target = instance[0].match(/wd:Q[0-9]*/g)[0].replace('wd:', 'http://www.wikidata.org/entity/') ;
+  let target = instance[0].match(/wd:Q[0-9]*/g)[0].replace('wd:', '') ;
 
   //get only keywords
   let keywords = entities.filter(entity => entity != target) ;

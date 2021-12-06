@@ -17,10 +17,8 @@ let cacheWikipMembers = new Cache('wikipedia_page_members', 'catTitle') ;
 
 export default async function runRequestCatMembers(lang, catTitle, apiurl, memberType, categoryMembers){
 
-  let variable = 'catTitle' ;
-
   // hit cache
-  let ask = cacheWikipMembers.getValues([catTitle+':'+lang]);
+  let ask = cacheWikipMembers.getValues([catTitle], lang);
 
   //check if hit
   //if(ask.hits.length > 0){
@@ -34,17 +32,21 @@ export default async function runRequestCatMembers(lang, catTitle, apiurl, membe
   }
 
   let result = await getCatMembers(lang, catTitle, apiurl, memberType, categoryMembers);
-  if(result == 'no_api_for_lang'){
-    let res = {catTitle: catTitle+':'+lang , result: 'no_api_for_lang'};
-    cacheWikipMembers.setValues([res]);
-    return res;
-  }
+
   if(result == 'invalidcategory'){
-    let res = {catTitle: catTitle+':'+lang , result: 'invalidcategory'};
-    cacheWikipMembers.setValues([res]);
+    console.log('  |  invalidcategory');
+    let res = {catTitle: catTitle , result: []};
+    cacheWikipMembers.setValues([res], lang);
     return res;
   }
-  cacheWikipMembers.setValues([result]);
+
+  result.result.forEach(item => {
+    if(item.ns != 14){
+      delete item.title;
+    }
+  });
+
+  cacheWikipMembers.setValues([result], lang);
   return result;
 
 }

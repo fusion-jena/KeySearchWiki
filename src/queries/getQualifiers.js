@@ -26,7 +26,7 @@ export default async function getQualifiers(values , request , source) {
   }
 
   function getQueryString(iris) {return `
-    SELECT ?iri ?target ?targetLabel ?keywordIRI ?keywordIRILabel ?isiri
+    SELECT ?iri ?target ?keywordIRI ?isiri
       WHERE
       {
         VALUES ?iri {${iris}}
@@ -37,7 +37,6 @@ export default async function getQualifiers(values , request , source) {
           FILTER(REGEX(STR(?pq), "http://www.wikidata.org/prop/qualifier/P")) .
           BIND(isIRI(?keywordIRI) as ?isiri) .
         }
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
       }
     `;
   }

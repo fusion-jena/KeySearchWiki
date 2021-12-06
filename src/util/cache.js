@@ -123,12 +123,16 @@ export default class Cache {
       visited.add(row[this._variable]);
     });
 
-    // add missing
-    vals.forEach(item => {
-      if (!visited.has(item)) {
-        resp.misses.push(item);
-      }
-    });
+
+
+    // add missing if endpoint enabled
+    if(Config.endpointEnabled){
+      vals.forEach(item => {
+        if (!visited.has(item)) {
+          resp.misses.push(item);
+        }
+      });
+    }
 
     return resp;
 
@@ -156,6 +160,13 @@ export default class Cache {
     // run everything
     insertMany(inserts);
 
+  }
+
+  // instead of returning every row together, an iterator is returned so we can retrieve the rows one by one.
+  getIterator(lang){
+    const db = this.getDb( lang );
+    const stmt = db.prepare(this._select);
+    return stmt.iterate();
   }
 
 }

@@ -1,15 +1,12 @@
 import bunyan                             from 'bunyan';
 import Config                             from './../config/config' ;
-import mkdirp                             from 'mkdirp';
+import ConfigExp                          from './../experiments/config' ;
 
 /**
  * create logger objects (mostly for network error logging in file / pipeline progress )
  *
  *
  */
-
-// create folder where to store gold standard file , logs ...
-mkdirp.sync(Config.outputGS);
 
 let logNetworkError = bunyan.createLogger({
   name: 'log-network-error',
@@ -31,6 +28,46 @@ let logPipelineProgress = bunyan.createLogger({
   ]
 });
 
+let cachePopLog = bunyan.createLogger({
+  name: 'cache-population-progress',
+  streams: [
+    {
+      level: 'info',
+      path: Config.cachePopLog
+    }
+  ]
+});
+
+let wikipediaCachePopLog = bunyan.createLogger({
+  name: 'wikipedia-cache-population-progress',
+  streams: [
+    {
+      level: 'info',
+      path: Config.wikipediaCachePopLog
+    }
+  ]
+});
+
+let downloadLog = bunyan.createLogger({
+  name: 'download-progress',
+  streams: [
+    {
+      level: 'info',
+      path: Config.downloadLog
+    }
+  ]
+});
+
+let experPrep = bunyan.createLogger({
+  name: 'data-preparation-experiments',
+  streams: [
+    {
+      level: 'info',
+      path: ConfigExp.experPrep
+    }
+  ]
+});
+
 /*let logWikipediaHit = bunyan.createLogger({
   name: 'wikipedia-hits',
   streams: [
@@ -40,4 +77,4 @@ let logPipelineProgress = bunyan.createLogger({
     }
   ]
 });*/
-export {logNetworkError, logPipelineProgress};
+export {logNetworkError, logPipelineProgress, cachePopLog , wikipediaCachePopLog, downloadLog, experPrep};

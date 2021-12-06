@@ -96,10 +96,10 @@ export default function diversifyEntries(fs){
 
     allsig.sort((a, b) => (a.size < b.size) ? 1 : -1);
 
-    allsig.forEach(item => {
-      //writeSig.write(JSON.stringify(item));
-      //writeSig.write('\r\n');
-    });
+    /*allsig.forEach(item => {
+      writeSig.write(JSON.stringify(item));
+      writeSig.write('\r\n');
+    });*/
 
     dataset.write('[');
     dataset.write('\r\n');

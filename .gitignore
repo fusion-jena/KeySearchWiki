@@ -94,3 +94,4 @@ typings/
 /cache*
 /dataset*
 /charts*
+/src/experiments/data*

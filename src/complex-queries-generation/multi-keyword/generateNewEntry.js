@@ -101,7 +101,7 @@ export default function generateNewEntry(fs){
 
           keywordsWithType.forEach((el,i) => {
             if(el.isiri != true){
-              sentence += el.label.replace(/-01-01T00:00:00Z/,'');
+              sentence += el.label.split('-')[0];
             }
             else{
               sentence += el.label;

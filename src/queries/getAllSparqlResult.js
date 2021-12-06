@@ -4,7 +4,7 @@ import {transformToCacheFormat} from './../util/wikidata/formatResult';
 /**
  * get result of all sparql query corresponding to set category
  * @param     {Function}          request   function to issue (sparql) queries
- * @param     {Array}             queries   list of queries to excute
+ * @param     {Array}             queries   list of queries to execute
  * @returns   {(Promise|Array)}   returns promise if we issue query to endpoint or direct array of result if data in cache
  */
 

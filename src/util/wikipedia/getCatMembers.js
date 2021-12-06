@@ -49,10 +49,6 @@ export default async function getCatMembers(lang , catTitle, apiurl, memberType,
     });
   }
   catch(e) {
-    if(e.code == 'ENOTFOUND'){
-    // if adress not found it means that the api is not available for the current language , transfer info
-      return 'no_api_for_lang' ;
-    }
     //if some network failure occurs, retry
     if(e.code == 'ECONNREFUSED' || e.code == 'ECONNRESET' || e.code == 'ETIMEDOUT' || e.code == 'EAI_AGAIN' || e.code == 'EHOSTUNREACH'){
     //write error in log together with query
@@ -119,6 +115,6 @@ export default async function getCatMembers(lang , catTitle, apiurl, memberType,
   // to use catTitle as identifier we need to make it unique , in general it is unique to the category , but in the case of same language ,
   //but another variant (en-simple and english) if it happens that en is in cache before running en-simple it will automatically take it from cache but in fact it should return the fact that there is no api lin for en-simple
 
-  return {catTitle: catTitle+':'+lang , result: categoryMembers} ;
+  return {catTitle: catTitle, result: categoryMembers} ;
 
 }

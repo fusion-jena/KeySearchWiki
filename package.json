@@ -2,14 +2,13 @@
   "name": "KeySearchWiki-generation-workflow",
   "version": "1.0.2",
   "description": "Source code for generating KeySearchWiki - An Automatically Generated Dataset for Keyword Search over Wikidata",
-"keywords": [
-  "Keyword Search",
-  "Knowledge Graph",
-  "Dataset",
-  "Wikidata",
-  "Wikipedia"
-],
-
+  "keywords": [
+    "Keyword Search",
+    "Knowledge Graph",
+    "Dataset",
+    "Wikidata",
+    "Wikipedia"
+  ],
   "scripts": {
     "generateCandidate": "babel-node --max-old-space-size=16384 src/workflow/generateCandidate.js",
     "cleanCandidate": "babel-node --max-old-space-size=16384 src/workflow/cleanCandidate.js",
@@ -24,23 +23,27 @@
     "generateFinalFormat": "babel-node --max-old-space-size=16384 src/workflow/generateFinalFormat.js",
     "generatePlots": "babel-node --max-old-space-size=16384 src/workflow/generatePlots.js",
     "compareSPARQL": "babel-node --max-old-space-size=16384 src/workflow/compareSPARQL.js",
-
+    "runEval": "babel-node --max-old-space-size=16384 src/experiments/runEval.js",
+    "prepare": "babel-node --max-old-space-size=16384 src/experiments/preparation/prepare.js",
+    "groupByType": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryType.js",
+    "statistics": "babel-node --max-old-space-size=16384 src/experiments/analysis/statistics.js",
+    "runner": "babel-node --max-old-space-size=16384 src/cache-population/runner.js",
+    "genHisto": "babel-node --max-old-space-size=16384 src/final-dataset-generation/generateTargetHisto.js",
     "build": "babel src --out-dir dist",
     "debug:instance2cat": "babel-node src/debug/instance2cat.js"
   },
   "author": {
-      "name": "Leila Feddoul",
-      "email": "Leila.Feddoul@uni-jena.de",
-      "url": "https://orcid.org/0000-0001-8896-8208"
-    },
-    "contributors": [
+    "name": "Leila Feddoul",
+    "email": "Leila.Feddoul@uni-jena.de",
+    "url": "https://orcid.org/0000-0001-8896-8208"
+  },
+  "contributors": [
     {
       "name": "Sirko Schindler",
-    "email": "Sirko.Schindler@dlr.de",
-    "url": "https://orcid.org/0000-0002-0964-4457"
+      "email": "Sirko.Schindler@dlr.de",
+      "url": "https://orcid.org/0000-0002-0964-4457"
     }
   ],
-
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -55,8 +58,12 @@
     "bunyan": "^1.8.15",
     "cli-progress": "^3.9.0",
     "cross-fetch": "^3.0.4",
+    "glob": "^7.2.0",
+    "glob-promise": "^4.2.0",
+    "mariadb": "^2.5.4",
     "mkdirp": "^1.0.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "unbzip2-stream": "^1.4.3"
   },
   "engines": {
     "node": ">=v14.16.1"

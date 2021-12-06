@@ -1,12 +1,13 @@
 module.exports = {
   'env': {
-    'browser': true,
+    'node': true,
+    'commonjs': true,
     'es6': true
   },
   'extends': 'eslint:recommended',
   'parserOptions': {
     'ecmaVersion': 2018,
-    'sourceType': 'module'
+    'sourceType': 'module',
   },
   'rules': {
     'indent': [
@@ -32,6 +33,7 @@ module.exports = {
     ],
     'no-console': [
       'warn',
+      { 'allow': ['warn', 'error'] }
     ],
     'no-trailing-spaces': [
       'warn'

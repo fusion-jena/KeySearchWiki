@@ -24,7 +24,7 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
   });
 
   let nrQueriesPerValue = {};
-  let dataset = [], labels = [], entriesArray = [];
+  let dataset = [], labels = [], entriesArray = [], ticks= '';
   rl.on('line', function(line) {
     entriesArray.push(JSON.parse(line));
   });
@@ -34,7 +34,34 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
     //sort descending
     entriesArray.sort((a, b) => (a[metric] < b[metric]) ? 1 : -1);
 
-    entriesArray.forEach((item, i) => {
+    // if metric = relevantEntitiesSize show more insights
+    if(metric == 'relevantEntitiesSize'){
+      let range1 = 0 , range2 = 0 , range3 = 0;
+      entriesArray.forEach(item => {
+        if(item[metric] >= 2 && item[metric] <= 600){
+          range1 ++;
+        }
+        if(item[metric] > 1000){
+          range2 ++;
+        }
+        if(item[metric] <= 1000){
+          range3 ++;
+        }
+      });
+
+      console.log('2 <= #RE <= 600 : '+ range1 );
+      console.log('#RE > 1000 : '+ range2 );
+      console.log('#RE <= 1000 : '+ range3 );
+
+      // limit ticks on x-axis
+      /*ticks = `,
+      ticks: {
+        maxTicksLimit: 5
+      }`;*/
+
+    }
+
+    entriesArray.forEach((item) => {
       if(nrQueriesPerValue.hasOwnProperty(item[metric])){
         nrQueriesPerValue[item[metric]] ++ ;
       }
@@ -44,16 +71,28 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
     });
 
     Object.keys(nrQueriesPerValue).forEach(key => {
-      dataset.push(nrQueriesPerValue[key]);
-      labels.push(parseInt(key));
+      if(metric == 'relevantEntitiesSize'){
+        dataset.push({x:parseInt(key), y:nrQueriesPerValue[key]});
+      }
+      else{
+        dataset.push(nrQueriesPerValue[key]);
+        labels.push(parseInt(key));
+      }
+
     });
 
     if(scale == 'log'){
-      dataset = dataset.map(value => Math.log10(value));
-      ylabel = 'log10(#final-entries)';
+      if(metric == 'relevantEntitiesSize'){
+        dataset = dataset.map(value => {return {x:Math.log10(value.x), y:Math.log10(value.y)};});
+        ylabel = 'log10(#final-entries)';
+      }
+      else{
+        dataset = dataset.map(value => Math.log10(value));
+        ylabel = 'log10(#final-entries)';
+      }
     }
 
-    let html = `
+    let htmlBar = `
   <head>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -97,6 +136,7 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
                     text: '${xLabel}',
                     display:true
                   }
+                  ${ticks}
               },
               y: {
                   beginAtZero: true,
@@ -114,7 +154,74 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
 
   `;
 
+    let htmlScatter = `
+<head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<canvas id="ScatterChart"></canvas>
+<script>
+var ctx = document.getElementById('ScatterChart').getContext('2d');
+
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'scatter',
+
+    // The data for our dataset
+    data: {
+        datasets: [{
+            label: '#final-entries',
+            backgroundColor: '${color}',
+            borderColor: '${color}',
+            data: ${JSON.stringify(dataset)}
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+      title: {
+        display:false ,
+        text: '#entries per ${metric} value'
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+        scales: {
+            x: {
+                type:'linear',
+                beginAtZero: true,
+                position: 'bottom',
+                title: {
+                  text: '${xLabel}',
+                  display:true
+                }
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                  text: '${ylabel}',
+                  display:true
+                },
+
+            }
+        }
+    }
+});
+</script>
+</body>
+
+`;
+
     let htmlFile = Config.plotMetric+`${scale}-${metric}.html`;
-    fs.writeFileSync(htmlFile, html);
+    if(metric == 'relevantEntitiesSize'){
+      fs.writeFileSync(htmlFile, htmlScatter);
+    }
+    else{
+      fs.writeFileSync(htmlFile, htmlBar);
+    }
+
   });
 }

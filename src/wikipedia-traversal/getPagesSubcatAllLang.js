@@ -1,4 +1,3 @@
-import getWikiTitleLang                                     from './../queries/getWikiTitleLang' ;
 import getLabel                                             from './../queries/getLabel' ;
 import getPagesSubcatTypeCheck                              from './getPagesSubcatTypeCheck';
 import {logPipelineProgress}                                from './../util/logger';
@@ -10,8 +9,9 @@ const { performance } = require('perf_hooks');
  * @param     {String}            catIRI       iri of the initial input category
  * @param     {Object}            titleLang    corresponding list of titles and languages corresponding to actual category
  * @param     {Function}          request      function to issue (sparql) queries
+ * @param     {Object}            subclasses   List of subclasses (direct/indirect) of target/wikimedia internal item, includes also target/wikimedia item itself
  */
-export default async function getPagesSubcatAllLang(target , catIRI, titleLang , request) {
+export default async function getPagesSubcatAllLang(target , catIRI, titleLang , request, subclasses) {
 
   // set for relevant results with type in subclass hierarchy of target
   let relevantSetMap = new Map(), withType = [] ;
@@ -19,14 +19,8 @@ export default async function getPagesSubcatAllLang(target , catIRI, titleLang ,
   let relevantSetNoTypeMap = new Map(), noType = [];
   // set for found relevant results found as members in wikipedia cat pages but their type is not in the target subclass hierarchy
   let relevantSetNoTargetTypeMap = new Map() , noTargetType = [] ;
-  // members that are in category page , but do not have corresponding wikidata item
-  let membersNoWikidataItem = [] ;
   //categories where we stopped exploring their hierarchy
   let catTypeCheckFailed = [] ;
-  //languages without wikimedia api
-  let noApiForLang = [];
-  // invalid category name (when getting cat members)
-  let invalidTitle = [];
   // initiate timers for
   let typeCheckT = 0 ,  typeCheckPostT= 0 , tlabel3 = 0, tlabel4 = 0, tlabel5 = 0, tlabel6 = 0 , tlabel7 = 0, tlabel8 = 0 ;
   //store detailled traversal times for each language
@@ -47,29 +41,18 @@ export default async function getPagesSubcatAllLang(target , catIRI, titleLang ,
     logPipelineProgress.info('lang: ' + lang);
 
     const tc0= performance.now();
-    let resultForLang = await getPagesSubcatTypeCheck(target, request, titleLang[i].title, apiurl, lang);
+    let resultForLang = await getPagesSubcatTypeCheck(target, request, titleLang[i].title, apiurl, lang, subclasses);
     const tc1= performance.now();
 
     typeCheckT = typeCheckT + (tc1 - tc0);
 
     const tcPost0= performance.now();
 
-    if(resultForLang != 'no_api_for_lang' && resultForLang != 'invalidcategory'){
+    if(resultForLang.relevantSet.length + resultForLang.relevantSetNoType.length + resultForLang.relevantSetNoTargetType.length != 0){
       timeTraversalLangs.push(resultForLang.timeTraversalOneLang);
     }
-
-    if(resultForLang == 'no_api_for_lang'){
-      //console.log('  |  no_api_for_lang');
-      logPipelineProgress.info('  |  no_api_for_lang');
-      noApiForLang.push(lang);
-      continue ;
-    }
-
-    if(resultForLang == 'invalidcategory'){
-      //console.log('  |  invalidcategory');
-      logPipelineProgress.info('  |  invalidcategory');
-      invalidTitle.push(titleLang[i].title);
-      continue ;
+    else {
+      continue;
     }
 
     resultForLang.relevantSet.forEach(item => {
@@ -126,8 +109,6 @@ export default async function getPagesSubcatAllLang(target , catIRI, titleLang ,
       }*/
     });
 
-
-    membersNoWikidataItem = [... membersNoWikidataItem , ...resultForLang.membersNoWikidataItem ] ;
     catTypeCheckFailed = [... catTypeCheckFailed , ...resultForLang.catTypeCheckFailed ] ;
 
     const tcPost1= performance.now();
@@ -267,6 +248,6 @@ export default async function getPagesSubcatAllLang(target , catIRI, titleLang ,
     irisSizenoTargetType: relevantSetNoTargetTypeMap.size, timeLabelCacheNoTargetType:(tlabel8-tlabel7),
     timeTraversalPerLang: timeTraversalLangs};
 
-  return {relevantSet: withType, relevantSetNoType: noType, relevantSetNoTargetType: noTargetType , membersNoWikidataItem: membersNoWikidataItem , catTypeCheckFailed:catTypeCheckFailed , noApiForLang: noApiForLang, invalidTitle:invalidTitle, timeWikiTraversal:timeWikiTraversal} ;
+  return {relevantSet: withType, relevantSetNoType: noType, relevantSetNoTargetType: noTargetType , catTypeCheckFailed:catTypeCheckFailed , timeWikiTraversal:timeWikiTraversal} ;
 
 }

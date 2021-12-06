@@ -14,16 +14,16 @@ const { performance } = require('perf_hooks');
  * @param     {String}            catTitle     title of initial category
  * @param     {String}            apiurl       apiurl for current language
  * @param     {String}            lang         current language
- * @returns   {Object | String}   string in case of 'no_api_for_lang'
+ * @param     {Object}            subclasses   List of subclasses (direct/indirect) of target/wikimedia internal item, includes also target/wikimedia item itself
+ * @returns   {Object}
  */
-export default async function getPagesSubcatTypeCheck(target, request, catTitle, apiurl, lang) {
+export default async function getPagesSubcatTypeCheck(target, request, catTitle, apiurl, lang, subclasses) {
 
   const start = performance.now();
 
   let relevantSet = [];
   let relevantSetNoType = [];
   let relevantSetNoTargetType = [];
-  let membersNoWikidataItem = [];
   let catTypeCheckFailed = [];
 
   //array of current category and all underlying subcategories
@@ -60,15 +60,8 @@ export default async function getPagesSubcatTypeCheck(target, request, catTitle,
 
     let catmembers = res.result;
 
-    // if address not found it means that the api is not available for the current language, stop here
-    if (catmembers == 'no_api_for_lang') {
-      return 'no_api_for_lang';
-    }
-    if (catmembers == 'invalidcategory') {
-      return 'invalidcategory';
-    }
     // if api available for current language
-    else {
+    if ( catmembers.length > 0 ){
       //gather category members that are pages (namespace = 0), for those pages we want to do type checking
       let pagesToCheck = [];
       catmembers.forEach(member => {
@@ -105,32 +98,15 @@ export default async function getPagesSubcatTypeCheck(target, request, catTitle,
         let wikidataIRISet = new Set();
 
         wikidataIDs.forEach(item => {
-          if ( item.result.pp ) {
-            if ( item.result.wikibase_item ) {
-              wikidataIRISet.add(item.result.wikibase_item);
-            }
-            else {
-              membersNoWikidataItem.push({
-                pageid:     item.pageid,
-                pagetitle:  item.result.title,
-                lang:       lang,
-                reason:     'no-wikidata-id' });
-            }
-          }
-          else {
-            membersNoWikidataItem.push({
-              pageid: item.pageid,
-              pagetitle: item.result.title,
-              lang: lang,
-              reason: 'no-pageprops'
-            });
+          if(item.result != ''){
+            wikidataIRISet.add(item.result);
           }
         });
 
         let irisArray = [...wikidataIRISet];
 
         const t4 = performance.now();
-        let result = await typeCheckWikiPages(request, target, irisArray, typeCheck, currentCat, lang, statsEntry);
+        let result = await typeCheckWikiPages(request, target, irisArray, typeCheck, currentCat, lang, statsEntry, subclasses);
         const t5 = performance.now();
 
         typeCheckAllSubcat = typeCheckAllSubcat + statsEntry.typeCheckSubcat;
@@ -200,7 +176,6 @@ export default async function getPagesSubcatTypeCheck(target, request, catTitle,
     relevantSet: relevantSet,
     relevantSetNoType: relevantSetNoType,
     relevantSetNoTargetType: relevantSetNoTargetType,
-    membersNoWikidataItem: membersNoWikidataItem,
     catTypeCheckFailed: catTypeCheckFailed,
     timeTraversalOneLang: timeTraversalOneLang
   };

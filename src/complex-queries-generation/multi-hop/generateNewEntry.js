@@ -130,7 +130,7 @@ export default function generateNewEntry(fs){
 
         newQueryKeywords.forEach((el,i) => {
           if(el.isiri != true){
-            sentence += el.label.replace(/-01-01T00:00:00Z/,'');
+            sentence += el.label.split('-')[0];
           }
           else{
             sentence += el.label;
@@ -142,7 +142,21 @@ export default function generateNewEntry(fs){
 
         let newQuery = sentence + ' '+ JSON.parse(cluster).target.label;
 
-        let entry = {currentEntry : JSON.parse(key).cat , clusterSubset: linkings[key][cluster].slice(0, 5)  , newQuery: {target: JSON.parse(cluster).target, keywords:newQueryKeywords, query: newQuery},union: union,  nrKeyword: newQueryKeywords.length + 1, nrWord:newQuery.split(' ').length,  clusterSize: linkings[key][cluster].length , currentEntryRelevantSize: JSON.parse(key).relevantSize, coverage: linkings[key][cluster].length / JSON.parse(key).relevantSize, newQueryRelevantSize:newQueryRelevantSize};
+        // remove duplicates from union
+
+        const unionSet = [];
+        const map = new Map();
+        for (const item of union) {
+          if(!map.has(item.iri)){
+            map.set(item.iri, true);
+            unionSet.push({
+              iri: item.iri,
+              label: item.label
+            });
+          }
+        }
+
+        let entry = {currentEntry : JSON.parse(key).cat , clusterSubset: linkings[key][cluster].slice(0, 5)  , newQuery: {target: JSON.parse(cluster).target, keywords:newQueryKeywords, query: newQuery},union: unionSet,  nrKeyword: newQueryKeywords.length + 1, nrWord:newQuery.split(' ').length,  clusterSize: linkings[key][cluster].length , currentEntryRelevantSize: JSON.parse(key).relevantSize, coverage: linkings[key][cluster].length / JSON.parse(key).relevantSize, newQueryRelevantSize:newQueryRelevantSize};
         queries.push(entry);
       });
     });

@@ -37,7 +37,10 @@ function transformToCacheFormat(resp, variable, values){
     respFormatted.push({[variable]: id , result: grouped[id]});
   });
 
-  return respFormatted ;
+  // remove url prefix from iris
+  let responseString = JSON.stringify(respFormatted).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, '');
+
+  return JSON.parse(responseString);
 
 }
 /**

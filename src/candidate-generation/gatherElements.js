@@ -5,12 +5,11 @@
  *
  *
  * @param     {Array}    qualifiersCat          "contains" qualifier values for set categories
- * @param     {Array}    qualifiersList         "contains" qualifier values for lists corresponding to set categories
  * @param     {Array}    extractedAnnotSparql    sparql queries corresponding to all set categories
  * @returns   {Object}   contains arrays of each of the gathered elements
  */
 
-export default function gatherElements(qualifiersCat, qualifiersList, extractedAnnotSparql){
+export default function gatherElements(qualifiersCat, extractedAnnotSparql){
 
   // gather all keywords
   let allKeywordIRIs = [];
@@ -25,13 +24,13 @@ export default function gatherElements(qualifiersCat, qualifiersList, extractedA
     });
   });
 
-  qualifiersList.forEach(qual => {
+  /*qualifiersList.forEach(qual => {
     qual.result.forEach(res => {
       if(res.hasOwnProperty('keywordIRI')){
         allKeywordIRIs.push(res.keywordIRI.toString());
       }
     });
-  });
+  });*/
 
   extractedAnnotSparql.forEach(ex => {
     ex.keywords.forEach(keyword => {
@@ -41,5 +40,7 @@ export default function gatherElements(qualifiersCat, qualifiersList, extractedA
   });
 
 
-  return {allKeywordIRIs: allKeywordIRIs, allSparqlTargets: allSparqlTargets} ;
+  //return {allKeywordIRIs: allKeywordIRIs, allSparqlTargets: allSparqlTargets} ;
+
+  return {allKeywordIRIs: allKeywordIRIs , allSparqlTargets: allSparqlTargets} ;
 }

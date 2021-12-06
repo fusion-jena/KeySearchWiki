@@ -17,12 +17,14 @@ export default async function  getWikiTitleLang(values, request) {
   function getQueryString(iris){return `
     SELECT ?catIRI ?title ?lang WHERE {
       VALUES ?catIRI {${iris}}
-    OPTIONAL{  ?wikiArticle schema:about ?catIRI .
-      ?wikiArticle schema:inLanguage ?lang .
+    OPTIONAL{
+      ?wikiArticle schema:about ?catIRI .
       ?wikiArticle schema:name ?title .
-      ?wikiArticle schema:isPartOf ?langWiki .
-      FILTER(REGEX(STR(?langWiki), "wikipedia.org"))}
-}
+      ?wikiArticle schema:isPartOf ?langWiki.
+      FILTER(REGEX(STR(?langWiki), "wikipedia.org")).
+      BIND (REPLACE(REPLACE(STR(?langWiki), "https://", ""),".wikipedia.org/", "")  AS ?lang).
+    }
+  }
     `;
   }
 

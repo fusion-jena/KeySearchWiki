@@ -38,7 +38,7 @@ export default async function runRequest(request, cache, variable , values , que
     let iriList = '';
 
     slice.forEach(rel => {
-      iriList += `<${rel}> `;
+      iriList += `wd:${rel} `;
     });
 
     reqs.push(request(queryString(iriList)));

@@ -15,12 +15,11 @@ export default async function getKeywordType(values , request) {
   let variable = 'iri' ;
 
   function getQueryString(iris){   return `
-    SELECT ?iri ?iriLabel ?type ?typeLabel
+    SELECT ?iri ?type
      WHERE
      {
        VALUES ?iri {${iris}}
        OPTIONAL{?iri wdt:P31 ?type .}
-       SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
        }
     `;
   }

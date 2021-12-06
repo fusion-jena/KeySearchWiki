@@ -1,14 +1,16 @@
 import getSetCategories           from './../queries/getSetCategories';
-import getCatMembersDBpedia       from './../queries/getCatMembersDBpedia';
+//import getCatMembersDBpedia       from './../queries/getCatMembersDBpedia';
 import getWikiTitleLang           from './../queries/getWikiTitleLang';
 import getQualifiers              from './../queries/getQualifiers';
 import getAllSparqlResult         from './../queries/getAllSparqlResult';
 import getKeywordType             from './../queries/getKeywordType';
-import getLabel                   from './../queries/getLabel';
+import getSubclasses              from './../queries/getSubclasses';
 import getAnnotSparql             from './../keyword-target-extraction/getAnnotSparql';
 import getAnnotPage               from './../keyword-target-extraction/getAnnotPage';
 import getPagesSubcatAllLang      from './../wikipedia-traversal/getPagesSubcatAllLang';
 import groupProperties            from './groupProperties';
+import getAllLabels               from './getAllLabels';
+import checkLangAccess            from './checkLangAccess';
 import gatherElements             from './gatherElements';
 import streamEntryWrite           from './streamEntryWrite';
 import Config                     from './../config/config';
@@ -42,10 +44,6 @@ export default async function generateCandidate(fs, request) {
 
   let timetraversal = fs.createWriteStream(Config.outputGS + 'time-traversal.json', { flags: 'a' });
   timetraversal.write('[');
-  let noApiForLang = [], invalidTitle = [];
-
-  //file where to store languages with no api
-  let file_no_api_lang = Config.outputGS + 'no-api-for-lang.json';
 
   //init all timestamps
   let tAnnotSparql0 = 0, tAnnotSparql1 = 0, tAnnotPageCat0 = 0, tAnnotPageCat1 = 0, tAnnotPageList0 = 0, tAnnotPageList1 = 0, tExecSparql0 = 0, tExecSparql1 = 0, tExecWikip0 = 0, tExecWikip1 = 0, tExecDBp0 = 0, tExecDBp1 = 0;
@@ -68,9 +66,9 @@ export default async function generateCandidate(fs, request) {
   // UNCOMMENT THE FOLLOWING PART IF YOU WANT TO RUN THE PIPELINE FOR JUST ONE SET CATEGORY
   // CHANGE THE CATEGORY IRI ACCORDINGLY IN THE FOLLOWING LINE
   /*
-  result = result.filter(elm => elm.setCat == 'http://www.wikidata.org/entity/Q7710106');
+  result = result.filter(elm => elm.setCat == 'Q10020104');
   console.log(result);
-  */
+*/
 
   console.group('Retrieve all data that can be fetched at once for now');
   logPipelineProgress.info('Retrieve all data that can be fetched at once for now');
@@ -89,17 +87,18 @@ export default async function generateCandidate(fs, request) {
   let qualifiersCat = await getQualifiers(grouped.valuesWithContains, request, 'set-category');
   const tQualifCat1 = performance.now();
 
-  console.log('fetch all qualifiers for lists corresponding to set categories');
+  /*console.log('fetch all qualifiers for lists corresponding to set categories');
   logPipelineProgress.info('fetch all qualifiers for lists corresponding to set categories');
 
   const tQualifList0 = performance.now();
   let qualifiersList = await getQualifiers(grouped.valuesWithList, request, 'list');
-  const tQualifList1 = performance.now();
+  const tQualifList1 = performance.now();*/
 
   console.log('gather all keywords and sparql targets');
   logPipelineProgress.info('gather all keywords and sparql targets');
 
-  let gathered = gatherElements(qualifiersCat, qualifiersList, grouped.extractedAnnotSparql);
+  //let gathered = gatherElements(qualifiersCat, qualifiersList, grouped.extractedAnnotSparql);
+  let gathered = gatherElements(qualifiersCat,grouped.extractedAnnotSparql);
 
   console.log('fetch all keyword types');
   logPipelineProgress.info('fetch all keyword types');
@@ -108,19 +107,29 @@ export default async function generateCandidate(fs, request) {
   const allTypes = await getKeywordType(gathered.allKeywordIRIs, request);
   const tAllKeyType1 = performance.now();
 
-  console.log('fetch all sparql target labels');
-  logPipelineProgress.info('fetch all sparql target labels');
-  //get sparql targets labels
-  const tAllTargetLabel0 = performance.now();
-  const allTargetLabels = await getLabel(gathered.allSparqlTargets, request);
-  const tAllTargetLabel1 = performance.now();
-
   console.log('execute all sparql queries corresponding to all set categories');
   logPipelineProgress.info('excute all sparql queries corresponding to all set categories');
   // get results of all sparql queries corresponding to set categories
   const tAllSparql0 = performance.now();
   let allSparqlResults = await getAllSparqlResult(request, grouped.extractedAnnotSparql);
   const tAllSparql1 = performance.now();
+
+  console.log('fetch all labels');
+  logPipelineProgress.info('fetch all labels');
+
+  const tAllLabel0 = performance.now();
+  let allTargetLabels = await getAllLabels( request, gathered, result, qualifiersCat, allTypes, allSparqlResults);
+  const tAllLabel1 = performance.now();
+
+  console.log('get list of sublasses of "Wikimedia internal item (Q17442446)');
+  logPipelineProgress.info('get list of sublasses of "Wikimedia internal item (Q17442446)');
+  let wikimediaSub = await getSubclasses(['Q17442446'], request);
+
+  console.log('Gather languages that both have API and download links');
+  logPipelineProgress.info('Gather languages that both have API and download links');
+
+  let langList = await checkLangAccess(wikipTitleLang);
+  //let langList = JSON.parse(fs.readFileSync(Config.outputGS + 'lang-list.json'));
 
   console.groupEnd();
 
@@ -137,7 +146,8 @@ export default async function generateCandidate(fs, request) {
     //console.group(`--- ${i+1}. ${result[i].result.setCatLabel} ---`);
     logPipelineProgress.info(`--- ${i + 1}. ${result[i].result.setCatLabel} ---`);
 
-    let entry = { queryID: result[i].setCat, query: result[i].result.setCatLabel[0], sparql: '', contains: '', list: '', relevant: { sparql: [], DBpedia: [], wikipedia: [] }, comment: '' };
+    //let entry = { queryID: result[i].setCat, query: result[i].result.setCatLabel, sparql: '', contains: '', list: '', relevant: { sparql: [], DBpedia: [], wikipedia: [] }, comment: '' };
+    let entry = { queryID: result[i].setCat, query: result[i].result.setCatLabel, sparql: '', contains: '', relevant: { sparql: [] , wikipedia: [] }, comment: '' };
 
     // if sparql query exists annotate from query
     if (result[i].result.hasOwnProperty('sparql')) {
@@ -173,7 +183,7 @@ export default async function generateCandidate(fs, request) {
     }
 
     //if corresponding list exists , annotate from "is a list of" P360 and qualifiers (if available)
-    if (result[i].result.hasOwnProperty('list')) {
+    /*if (result[i].result.hasOwnProperty('list')) {
 
       //console.log('list exists , annotate from it');
       logPipelineProgress.info('list exists , annotate from it');
@@ -193,7 +203,7 @@ export default async function generateCandidate(fs, request) {
       tAnnotPageList1 = performance.now();
 
       entry.list = listAnnot;
-    }
+    }*/
 
     if (!result[i].result.hasOwnProperty('sparql') && !result[i].result.hasOwnProperty('contains') && !result[i].result.hasOwnProperty('list')) {
       //console.log('no annotation source available');
@@ -226,7 +236,7 @@ export default async function generateCandidate(fs, request) {
       entry.relevant.sparql = relevant ;
     }
 
-    //console.log('retrieve list of relevant results : DBpedia');
+    /*//console.log('retrieve list of relevant results : DBpedia');
     logPipelineProgress.info('retrieve list of relevant results : DBpedia');
     // REMARK: till now remarked that all queries (for current set cats) that attempt to retrieve relevant results from dbpedia give empty result (missing mapping between DBpedia and wikidata)
     // estimated time to run dbpedia members retrieval queries for all set Cats ~9hours (that most probably at the end waste without finding any result over whole pipeline)
@@ -240,12 +250,12 @@ export default async function generateCandidate(fs, request) {
     //check if result is empty (using OPTIONAL in queries with VALUES , keeps the ids also in case of no result which results in having , {id: , result:[{}]})
     if (!Object.keys(rel[0].result[0]).length == 0) {
       entry.relevant.DBpedia = rel;
-    }
+    }*/
 
     let timeWikiPerTarget = [];
 
     //get category members from wikipedia (type check)
-    if (entry.contains != '' && entry.contains.length > 0) {
+    if (entry.contains != '' && entry.contains.length == 1) {
 
       //console.group('retrieve list of relevant results : Wikipedia');
       logPipelineProgress.info('retrieve list of relevant results : Wikipedia');
@@ -260,29 +270,31 @@ export default async function generateCandidate(fs, request) {
 
         // find title and language of corresponding wikipedia category page
         let found = wikipTitleLang.find(cat => cat.catIRI == result[i].setCat);
-        //filter elements without both title and length
-        let titleLang = found.result.filter(item => item.hasOwnProperty('title') && item.hasOwnProperty('lang'));
-        if (titleLang.length != 0) {
+        //filter elements without both title and lang and also non accepted languages
+        let titleLang = found.result.filter(item => item.hasOwnProperty('title') && item.hasOwnProperty('lang') && langList.accepted.some(el => el == item.lang));
+
+        if (titleLang.length != 0 ) {
           let target = entry.contains[j].target;
           //console.log(target);
           logPipelineProgress.info(target);
 
-          let relevantWikip = await getPagesSubcatAllLang(target, result[i].setCat, titleLang, request);
+          // get list of sublasses of target
+          let targetSub = await getSubclasses([target]);
+          let subclasses = {target:targetSub , wikimedia:wikimediaSub};
+
+          let relevantWikip = await getPagesSubcatAllLang(target, result[i].setCat, titleLang, request, subclasses);
 
           entry.relevant.wikipedia.push({
             target: target,
             targetType:         relevantWikip.relevantSet,
             noType:             relevantWikip.relevantSetNoType,
             noTargetType:       relevantWikip.relevantSetNoTargetType,
-            noWikidataID:       relevantWikip.membersNoWikidataItem,
             catTypeCheckFailed: relevantWikip.catTypeCheckFailed
           });
-          noApiForLang = [...noApiForLang, ...relevantWikip.noApiForLang];
-          invalidTitle = [...invalidTitle, ...relevantWikip.invalidTitle];
 
           const tTraversalTarget1 = performance.now();
 
-          timeWikiPerTarget.push({ catIRI: result[i].setCat, catLabel: result[i].result.setCatLabel[0], target: target, timeWikiTraversal: relevantWikip.timeWikiTraversal, timeTraversalTarget: (tTraversalTarget1 - tTraversalTarget0) });
+          timeWikiPerTarget.push({ catIRI: result[i].setCat, catLabel: result[i].result.setCatLabel, target: target, timeWikiTraversal: relevantWikip.timeWikiTraversal, timeTraversalTarget: (tTraversalTarget1 - tTraversalTarget0) });
 
         }
       }
@@ -290,11 +302,6 @@ export default async function generateCandidate(fs, request) {
 
       //console.groupEnd();
 
-      // write languages without api into file
-      noApiForLang = [... new Set(noApiForLang)];
-      invalidTitle = [... new Set(invalidTitle)];
-
-      fs.writeFileSync(file_no_api_lang, JSON.stringify(noApiForLang));
     }
 
     //console.log('Write dataset entry into file + gather statistics');
@@ -310,7 +317,6 @@ export default async function generateCandidate(fs, request) {
         sizeTargetType: item.targetType.length,
         sizeNoType: item.noType.length,
         sizeNoTargetType: item.noTargetType.length,
-        sizeNoWikidataID: item.noWikidataID.length,
         sizeCatTypeCheckFailed: item.catTypeCheckFailed.length,
       });
     });
@@ -319,17 +325,17 @@ export default async function generateCandidate(fs, request) {
     //gather time and other information (prop existance , relv result length ...)
     let statistics = {
       queryID: result[i].setCat,
-      query: result[i].result.setCatLabel[0],
+      query: result[i].result.setCatLabel,
       sparql: result[i].sparql != '', timeAnnotSparql: (tAnnotSparql1 - tAnnotSparql0) / 1000,
       contains: result[i].contains != '', timeAnnotContains: (tAnnotPageCat1 - tAnnotPageCat0) / 1000,
-      list: result[i].list != '', timeAnnotList: (tAnnotPageList1 - tAnnotPageList0) / 1000,
+      timeAnnotList: (tAnnotPageList1 - tAnnotPageList0) / 1000,
       timeExecSparql: (tExecSparql1 - tExecSparql0) / 1000, relvSparqlSize: relvSparqlSize,
-      timeExecDB: (tExecDBp1 - tExecDBp0) / 1000, relvDBSize: entry.relevant.DBpedia.length,
+      //timeExecDB: (tExecDBp1 - tExecDBp0) / 1000, relvDBSize: entry.relevant.DBpedia.length,
       timeExecWiki: (tExecWikip1 - tExecWikip0) / 1000, sizes: relvWikiSize
     };
 
     try {
-      logStreamGS.write(JSON.stringify(entry).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, ''));
+      logStreamGS.write(JSON.stringify(entry));
     }
     catch(e){
       if(e.message == 'Invalid string length'){
@@ -397,11 +403,10 @@ export default async function generateCandidate(fs, request) {
     timeGetAllCat: (tAllCat1 - tAllCat0) / 1000,
     timeGetLangs: (tAllTitleLangs1 - tAllTitleLangs0) / 1000,
     timeGetQualifCat: (tQualifCat1 - tQualifCat0) / 1000,
-    timeGetQualifList: (tQualifList1 - tQualifList0) / 1000,
+    //timeGetQualifList: (tQualifList1 - tQualifList0) / 1000,
     timeGetTypes: (tAllKeyType1 - tAllKeyType0) / 1000,
-    timeGetTargetLabels: (tAllTargetLabel1 - tAllTargetLabel0) / 1000,
+    timeGetTargetLabels: (tAllLabel1 - tAllLabel0) / 1000,
     timeAllSparql: (tAllSparql1 - tAllSparql0) / 1000,
-    invalidTitle: invalidTitle,
     totalTime: (end - start) / 1000
   };
 

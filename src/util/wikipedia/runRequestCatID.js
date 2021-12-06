@@ -57,15 +57,12 @@ export default async function runRequestCatID(pages, apiurl, lang) {
 
   res.forEach(item => {
     Object.keys(item).forEach(key => {
-      resp.push({
-        pageid: key,
-        result: {
-          title:  item[key].title,
-          ns:     item[key].ns,
-          pp:     !!item[key].pageprops,
-          wikibase_item: item[key]?.pageprops?.wikibase_item,
-        }
-      })
+      if( item[key]?.pageprops?.wikibase_item != undefined){
+        resp.push({pageid: key, result:item[key].pageprops.wikibase_item})
+      }
+      else{
+        resp.push({pageid: key, result:''})
+      }
     });
   });
 

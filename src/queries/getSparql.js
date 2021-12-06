@@ -7,12 +7,11 @@
 export default function getSparql( sparqlID, path ) {
 
   return   `
-    SELECT DISTINCT ?query ?item ?itemLabel
+    SELECT DISTINCT ?query ?item
     WHERE
     {
       VALUES ?query {<${sparqlID}>}
       OPTIONAL { ${path} }
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
     }
     `;
 

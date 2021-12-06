@@ -16,7 +16,7 @@ export default function streamEntryWrite(data, writeStream){
     if(key != 'relevant'){
       writeStream.write(JSON.stringify(key));
       writeStream.write(':');
-      writeStream.write(JSON.stringify(data[key]).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, ''));
+      writeStream.write(JSON.stringify(data[key]));
       if(key != 'comment'){
         writeStream.write(',');
       }
@@ -29,7 +29,7 @@ export default function streamEntryWrite(data, writeStream){
         if(element != 'wikipedia'){
           writeStream.write(JSON.stringify(element));
           writeStream.write(':');
-          writeStream.write(JSON.stringify(data[key][element]).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, ''));
+          writeStream.write(JSON.stringify(data[key][element]));
           writeStream.write(',');
         }
         else{
@@ -43,7 +43,7 @@ export default function streamEntryWrite(data, writeStream){
               if(!Array.isArray(item[k])){
                 writeStream.write(JSON.stringify(k));
                 writeStream.write(':');
-                writeStream.write(JSON.stringify(item[k]).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, ''));
+                writeStream.write(JSON.stringify(item[k]));
                 writeStream.write(',');
               }
               else{
@@ -51,7 +51,7 @@ export default function streamEntryWrite(data, writeStream){
                 writeStream.write(':');
                 writeStream.write('[');
                 item[k].forEach( (object, i) => {
-                  writeStream.write(JSON.stringify(object).replace(/http:\/\/www\.wikidata\.org\/entity\//gm, ''));
+                  writeStream.write(JSON.stringify(object));
                   if(i!=item[k].length - 1 ){
                     writeStream.write(',');
                   }
