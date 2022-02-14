@@ -223,7 +223,7 @@ Then indexing is started by following the instructions in [Elas4RDF-index](https
 Make sure that:
 - The Elasticsearch server is started.
 - The generated N-Triples file is put within the place specified in the ``/Elas4RDF-index/res/configuration/.properties`` configuration file under the property `index.data`.
-Our used configuration file can be found here [`./experiments/Elas4RDF-config/wiki-subset.properties`](https://github.com/fusion-jena/KeySearchWiki/blob/master/experiments/Elas4RDF-config/wiki-subset.properties).
+Our used configuration file can be found here [`./data/Elas4RDF-config/wiki-subset.properties`](https://github.com/fusion-jena/KeySearchWiki/blob/master/data/Elas4RDF-config/wiki-subset.properties).
 
 Indexing was started using this command: `python3 indexer_service.py -config ./Elas4RDF-index/res/configuration/wiki-subset.properties` in Elas4RDF-index root folder.
 
@@ -236,7 +236,7 @@ Then, the search service is setup by following the instructions in [Elas4RDF-sea
 The index initialization for search was performed using the following command: `curl --header "Content-Type: application/json" -X POST localhost:8080/elas4rdf-rest-0.0.1-SNAPSHOT/datasets -d "@/Elas4RDF-index/output.json"`.
 
 The file `output.json` is automatically generated after the indexing process.
-The created output file in our case can be found here [`./experiments/Elas4RDF-config/output.json`](https://github.com/fusion-jena/KeySearchWiki/blob/master/experiments/Elas4RDF-config/output.json).
+The created output file in our case can be found here [`./data/Elas4RDF-config/output.json`](https://github.com/fusion-jena/KeySearchWiki/blob/master/data/Elas4RDF-config/output.json).
 
 ### Evaluation
 
@@ -316,7 +316,7 @@ To evaluate the correctness of the relevant entities included in KeySearchWiki, 
 Note that the `compareSPARQL` script uses the `./dataset/native-dataset.json` as input.
 For that steps 1-6 from [Dataset generation workflow](#dataset-generation-workflow) should be executed first.
 
-Current evaluation results could be found under [`./eval/`](https://github.com/fusion-jena/KeySearchWiki/blob/master/eval/).
+Current evaluation results could be found under [`./data/eval-results`](https://github.com/fusion-jena/KeySearchWiki/blob/master/data/eval-results/).
 
 <!---## Cite , consider updating codemeta with paper link and also zenodo metadata-->
 
