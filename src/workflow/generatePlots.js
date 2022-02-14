@@ -7,10 +7,9 @@ import Config                           from './../config/config';
 
   console.log('Generating Plots . . .');
 
-  plotMetricFrequency('relevantEntitiesSize','log', 'black', Config.metricDatasetFinal , 'log10(#RE)');
+  plotMetricFrequency('relevantEntitiesSize','log', 'black', Config.metricDatasetFinal , '#RE');
   plotMetricFrequency('nrKeyword','linear', 'blue', Config.metricDatasetFinal , '#Terms');
   plotMetricFrequencyBinned('coverage', 'green',1,0.2, Config.metricDatasetFinal, 'coverage', '#final-entries', 'cov', 40);
-  //plotMetricFrequencyBinned('fractionIntersectWiki', 'blue',1,0.1, Config.eval + '.json', 'x = intersect / #RE', '#native-entries', 'x', 25);
-  //plotMetricFrequencyBinned('fractionIntersectSparql', 'green',1,0.1, Config.eval + '.json', 'x = intersect / #SPARQL', '#native-entries', 'x', 25);
-
+  plotMetricFrequencyBinned('fractionIntersectWiki', 'blue',1,0.1, Config.eval + 'compare.json', 'Precision', '#queries', 'x', 25);
+  plotMetricFrequencyBinned('fractionIntersectSparql', 'green',1,0.1, Config.eval + 'compare.json', 'Recall', '#queries', 'x', 25);
 })();

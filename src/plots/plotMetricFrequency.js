@@ -84,11 +84,9 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
     if(scale == 'log'){
       if(metric == 'relevantEntitiesSize'){
         dataset = dataset.map(value => {return {x:Math.log10(value.x), y:Math.log10(value.y)};});
-        ylabel = 'log10(#final-entries)';
       }
       else{
         dataset = dataset.map(value => Math.log10(value));
-        ylabel = 'log10(#final-entries)';
       }
     }
 
@@ -156,7 +154,7 @@ export default function plotMetricFrequency(metric, scale, color , fileName ,xLa
 
     let htmlScatter = `
 <head>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 </head>
 
 <body>
@@ -174,6 +172,7 @@ var chart = new Chart(ctx, {
             label: '#final-entries',
             backgroundColor: '${color}',
             borderColor: '${color}',
+            pointRadius: 1,
             data: ${JSON.stringify(dataset)}
         }]
     },
@@ -190,23 +189,34 @@ var chart = new Chart(ctx, {
         }
       },
         scales: {
-            x: {
-                type:'linear',
-                beginAtZero: true,
-                position: 'bottom',
-                title: {
-                  text: '${xLabel}',
-                  display:true
-                }
-            },
-            y: {
-                beginAtZero: true,
-                title: {
-                  text: '${ylabel}',
-                  display:true
-                },
+          xAxes: [{
+    type:'linear',
+    position: 'bottom',
+    ticks: {
+      userCallback: function(label, index, labels) {
+        return Math.pow(10,label).toLocaleString();
+      }
+    },
+    scaleLabel: {
+      display: true,
+      labelString: '${xLabel}'
+           }
+  }],
+  yAxes: [{
+      ticks:{
+    stepSize: 1,
+    userCallback: function(label, index, labels) {
+        return Math.pow(10,label).toLocaleString();
+      }
+    },
+    scaleLabel: {
+      display: true,
+      labelString: '${ylabel}'
+           }
 
-            }
+  }]
+
+
         }
     }
 });
