@@ -33,13 +33,13 @@ export default function compareSPARQL(fs){
 
   parser.on('end', () => {
 
-    let compareCSV = fs.createWriteStream(Config.eval+'compare.csv', {flags: 'a'});
+    //let compareCSV = fs.createWriteStream(Config.eval+'compare.csv', {flags: 'a'});
     let compareJSON = fs.createWriteStream(Config.eval+'compare.json', {flags: 'a'});
     let compareStats = fs.createWriteStream(Config.eval+'statistics-compare.json', {flags: 'a'});
 
     let fractionIntersectSparqlSumm = 0, fractionIntersectWikiSumm = 0 ;
-    compareCSV.write('queryID,query,sparql,intersection/sparqlSize,intersection/wikiSize,sparqlSize,wikiSize,intersection,onlyInSparql,onlyInWiki');
-    compareCSV.write('\r\n');
+    //compareCSV.write('queryID,query,sparql,intersection/sparqlSize,intersection/wikiSize,sparqlSize,wikiSize,intersection,onlyInSparql,onlyInWiki');
+    //compareCSV.write('\r\n');
 
     sparql.forEach(item => {
 
@@ -51,8 +51,8 @@ export default function compareSPARQL(fs){
       let onlyInSparql = _.difference(relevantSparql, relevantWiki);
       let onlyInWiki =  _.difference(relevantWiki, relevantSparql);
 
-      compareCSV.write(`${item.queryID},${item.query},${item.sparql.query},${intersect.length/relevantSparql.length},${intersect.length/relevantWiki.length},${relevantSparql.length},${relevantWiki.length},${intersect.length},${onlyInSparql.length},${onlyInWiki.length}`);
-      compareCSV.write('\r\n');
+      //compareCSV.write(`${item.queryID},${item.query},${item.sparql.query},${intersect.length/relevantSparql.length},${intersect.length/relevantWiki.length},${relevantSparql.length},${relevantWiki.length},${intersect.length},${onlyInSparql.length},${onlyInWiki.length}`);
+      //compareCSV.write('\r\n');
 
       //for writing as json
 
@@ -66,8 +66,8 @@ export default function compareSPARQL(fs){
         queryID: item.queryID,
         query: item.query,
         sparql: item.sparql.query,
-        fractionIntersectSparql:fractionIntersectSparql,
-        fractionIntersectWiki:fractionIntersectWiki,
+        Recall:fractionIntersectSparql,
+        Precision:fractionIntersectWiki,
         relevantSparqlSize:relevantSparql.length,
         relevantWikiSize:relevantWiki.length,
         itersectionSize: intersect.length,
