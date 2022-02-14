@@ -94,4 +94,7 @@ typings/
 /cache*
 /dataset*
 /charts*
-/src/experiments/data*
+/experiments*
+/wikipedia-dump*
+/eval*
+

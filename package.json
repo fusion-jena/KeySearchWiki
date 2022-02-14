@@ -28,7 +28,7 @@
     "groupByType": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryType.js",
     "groupByTypeNatur": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryTypeNatur.js",
     "runEval": "babel-node --max-old-space-size=16384 src/experiments/runEval.js",
-    "prepare": "babel-node --max-old-space-size=16384 src/experiments/preparation/prepare.js",
+    "prepareData": "babel-node --max-old-space-size=16384 src/experiments/preparation/prepare.js",
     "statistics": "babel-node --max-old-space-size=16384 src/experiments/analysis/statistics.js",
     "genHisto": "babel-node --max-old-space-size=16384 src/final-dataset-generation/generateTargetHisto.js",
     "build": "babel src --out-dir dist",
@@ -49,16 +49,16 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.8.7",
-    "@babel/node": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "@babel/register": "^7.8.6"
+    "@babel/core": "^7.17.2",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/register": "^7.17.0"
   },
   "dependencies": {
     "JSONStream": "^1.3.5",
-    "better-sqlite3": "^7.1.2",
+    "better-sqlite3": "^7.5.0",
     "bunyan": "^1.8.15",
-    "cli-progress": "^3.9.0",
+    "cli-progress": "^3.10.0",
     "cross-fetch": "^3.1.5",
     "glob": "^7.2.0",
     "glob-promise": "^4.2.0",
