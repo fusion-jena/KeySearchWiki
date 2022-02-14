@@ -45,9 +45,10 @@ export default function diversifyEntries(fs){
 
   parser.on('end', () => {
 
-    console.log('Group by query type and select representative ... ');
+    console.log('Group by query type and select representative . . . ');
 
-    //let writeSig = fs.createWriteStream(Config.outputGS + 'signature.json', { flags: 'a' });
+    let writeSig = fs.createWriteStream(Config.outputGS + 'signature.json', { flags: 'a' });
+    let redundancyStats = fs.createWriteStream(Config.outputGS + 'statistics-redundancy.json', { flags: 'a' });
     let dataset = fs.createWriteStream(Config.finalDataset, { flags: 'a' });
     let metrics = fs.createWriteStream(Config.metricDatasetFinal, { flags: 'a' });
 
@@ -96,32 +97,97 @@ export default function diversifyEntries(fs){
 
     allsig.sort((a, b) => (a.size < b.size) ? 1 : -1);
 
-    /*allsig.forEach(item => {
+    allsig.forEach(item => {
       writeSig.write(JSON.stringify(item));
       writeSig.write('\r\n');
-    });*/
+    });
 
     dataset.write('[');
     dataset.write('\r\n');
 
+    // write only non-redundant entries: if a native query is already provided , not need to consider the generated one
+    // e.g., "NT1150 male television actor telenovela human" AND "MK40631 male television actor telenovela human"
+    //       "NT7966 Wizex album" AND "MH125 Wizex album"
+
+    let set = new Set(), redundantQueryCount = 0 , redundantQueryArray = [],
+        queryWithRedundancy = [] ;
+
     datasetArray.forEach((item, i) => {
-      dataset.write(JSON.stringify(item));
-      metrics.write(JSON.stringify(item.metrics));
-      if(i!=  datasetArray.length - 1){
-        dataset.write(',');
+
+      // check if the query keywords are not redundant (in case of literal), e.g., in Capitol Records 2012 2012 (Q193023 2012-00-00T00:00:00Z 2012-01-01T00:00:00Z Q134556)
+      let keywordSet = new Set(), sentence = '';
+      let newKeywordsArray = [] ;
+
+      item.keywords.forEach(el => {
+
+        let toCheck ;
+
+        if(el.isiri != true){ toCheck = el.label.split('-')[0];}
+        if(el.isiri == true){ toCheck = el.iri;}
+
+        if(!keywordSet.has(toCheck)){
+          newKeywordsArray.push(el);
+        }
+        else{
+          queryWithRedundancy.push(item.queryID);
+        }
+        keywordSet.add(toCheck);
+
+      });
+
+      newKeywordsArray.forEach((el,j) => {
+
+        if(el.isiri != true){
+          sentence += el.label.split('-')[0];
+        }
+        else{
+          sentence += el.label;
+        }
+        if(j!= newKeywordsArray.length -1){
+          sentence += ' ';
+        }
+
+      });
+
+      item.query = `${sentence} ${item.target.label}`;
+      item.keywords = newKeywordsArray;
+
+      if(!set.has(item.query)){
+        dataset.write(JSON.stringify(item));
+        metrics.write(JSON.stringify(item.metrics));
+        if(i!=  datasetArray.length - 1){
+          dataset.write(',');
+        }
+        dataset.write('\r\n');
+        metrics.write('\r\n');
       }
-      dataset.write('\r\n');
-      metrics.write('\r\n');
+      if(set.has(item.query)){
+        redundantQueryCount ++;
+        redundantQueryArray.push(item.queryID);
+
+        if(item.queryID.includes('NT')){
+          dataset.write(JSON.stringify(item));
+          metrics.write(JSON.stringify(item.metrics));
+          if(i!=  datasetArray.length - 1){
+            dataset.write(',');
+          }
+          dataset.write('\r\n');
+          metrics.write('\r\n');
+        }
+      }
+      set.add(item.query);
     });
 
     dataset.write(']');
+    redundancyStats.write(JSON.stringify({redundantCount: redundantQueryCount, redundantQueries: redundantQueryArray}));
+    redundancyStats.write('\r\n');
+    redundancyStats.write(JSON.stringify({queriesWithRedundantKeywordNr: queryWithRedundancy.length, queriesWithRedundantKeyword: queryWithRedundancy}));
 
     const end = performance.now();
 
     console.log(`Time taken: ${(end - start) / 1000} s`);
 
     console.log('# distinct signatures: '+  Object.keys(signature).length);
-    console.log('# final entries: '+  datasetArray.length);
 
   });
 
