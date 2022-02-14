@@ -42,7 +42,7 @@ export default async function generateSingleRun(sim){
 
         const data = await res.json();
 
-        console.log(data.results.total_entities);
+        console.log('#RE: ' + data.results.total_entities);
 
         let rank = 1 ;
 
