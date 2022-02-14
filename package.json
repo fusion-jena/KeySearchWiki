@@ -10,6 +10,7 @@
     "Wikipedia"
   ],
   "scripts": {
+    "runner": "babel-node --max-old-space-size=16384 src/cache-population/runner.js",
     "generateCandidate": "babel-node --max-old-space-size=16384 src/workflow/generateCandidate.js",
     "cleanCandidate": "babel-node --max-old-space-size=16384 src/workflow/cleanCandidate.js",
     "generateNativeEntry": "babel-node --max-old-space-size=16384 src/workflow/generateNativeEntry.js",
@@ -21,13 +22,14 @@
     "diversifyEntries": "babel-node --max-old-space-size=16384 src/workflow/diversifyEntries.js",
     "generateStatFinal": "babel-node --max-old-space-size=16384 src/workflow/generateStatFinal.js",
     "generateFinalFormat": "babel-node --max-old-space-size=16384 src/workflow/generateFinalFormat.js",
-    "generatePlots": "babel-node --max-old-space-size=16384 src/workflow/generatePlots.js",
+    "naturalizeQueries": "babel-node --max-old-space-size=16384 src/workflow/naturalize.js",
     "compareSPARQL": "babel-node --max-old-space-size=16384 src/workflow/compareSPARQL.js",
+    "generatePlots": "babel-node --max-old-space-size=16384 src/workflow/generatePlots.js",
+    "groupByType": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryType.js",
+    "groupByTypeNatur": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryTypeNatur.js", 
     "runEval": "babel-node --max-old-space-size=16384 src/experiments/runEval.js",
     "prepare": "babel-node --max-old-space-size=16384 src/experiments/preparation/prepare.js",
-    "groupByType": "babel-node --max-old-space-size=16384 src/experiments/preparation/groupByQueryType.js",
     "statistics": "babel-node --max-old-space-size=16384 src/experiments/analysis/statistics.js",
-    "runner": "babel-node --max-old-space-size=16384 src/cache-population/runner.js",
     "genHisto": "babel-node --max-old-space-size=16384 src/final-dataset-generation/generateTargetHisto.js",
     "build": "babel src --out-dir dist",
     "debug:instance2cat": "babel-node src/debug/instance2cat.js"

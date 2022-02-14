@@ -74,12 +74,13 @@ const Config = {
   queryLabel: path.join(__dirname,'..', '..','/dataset/KeySearchWiki-queries-label.txt'),
   queryIRI: path.join(__dirname,'..', '..','/dataset/KeySearchWiki-queries-iri.txt'),
   qrelsTREC: path.join(__dirname,'..', '..','/dataset/KeySearchWiki-qrels-trec.txt'),
+  queryNatur: path.join(__dirname,'..', '..','/dataset/KeySearchWiki-queries-naturalized.txt'),
 
   //output plots
   plotMetric: path.join(__dirname,'..', '..','/charts/'),
 
   //output evaluation
-  eval: path.join(__dirname,'..', '..','/dataset/eval'),
+  eval: path.join(__dirname,'..', '..','/eval/'),
 
   //cache database files
   cachePath: path.join(__dirname,'..', '..','/cache/'),
