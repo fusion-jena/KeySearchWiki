@@ -196,7 +196,7 @@ Finally, N-Triples are generated from entities and their objects description/lab
   <http://www.wikidata.org/entity/Q23> <http://www.wikidata.org/prop/direct/P509> <http://www.wikidata.org/entity/Q3827083> .
   ...
 ```
-Data preparation for our experiments is reproduced by running the command `npm run prepare` in the project's root folder.
+Data preparation for our experiments is reproduced by running the command `npm run prepareData` in the project's root folder.
 
 ### Indexing
 We used the same best performing indexing (extended (s)(p)(o)<sup>2</sup>) reported by [G. Kadilierakis et al.](https://link.springer.com/chapter/10.1007%2F978-3-030-49461-2_8), where each triple is represented with an Elasticsearch document consisting of the following fields:
