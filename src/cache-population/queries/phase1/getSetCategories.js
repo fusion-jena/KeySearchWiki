@@ -6,7 +6,7 @@ const cache = new Cache( 'Categories', 'setCat' );
 
 export default function getSetCategories( entry ) {
 
-  // Q59542487 ... "Wikimedia set category"
+  // e.g., Q59542487 ... "Wikimedia set category"
   if( !entry._isSetCat ) {
     return;
   }

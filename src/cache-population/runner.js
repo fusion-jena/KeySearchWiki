@@ -2,10 +2,10 @@ import CacheConfig from './config';
 import Config from './../config/config';
 import { cachePopLog as Log } from './../util/logger';
 import { isInstanceOf } from './util';
-//import groupByLang from './queries/phase2/groupByLang';
-//import getCatsTarget from './queries/phase2/getCatsTarget';
-//import download from './queries/phase2/download';
-//import populateCaches from './queries/phase2/populateCaches';
+import groupByLang from './queries/phase2/groupByLang';
+import getCatsTarget from './queries/phase2/getCatsTarget';
+import download from './queries/phase2/download';
+import populateCaches from './queries/phase2/populateCaches';
 
 import Glob from 'glob-promise';
 
@@ -63,7 +63,7 @@ import Zlib from 'zlib';
       : JSON.parse( line );               // last (data) line does not have a comma
 
     // augment with common data
-    entry._isSetCat = isInstanceOf( entry, 'Q59542487' );
+    entry._isSetCat = isInstanceOf( entry, Config.categoryIRI );
 
     // pass through all queries
     await Promise.all( queries.map( (q) => q( entry ) ) );

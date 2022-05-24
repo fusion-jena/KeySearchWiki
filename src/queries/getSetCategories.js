@@ -17,7 +17,7 @@ export default async function getSetCategories(request) {
     SELECT ?setCat ?sparql ?contains ?list
     WHERE
     {
-      ?setCat wdt:P31 wd:Q59542487 .
+      ?setCat wdt:P31 wd:${Config.categoryIRI} .
       OPTIONAL {
           ?setCat wdt:P3921 ?sparql .
           # filter sparql queries that deal with literals

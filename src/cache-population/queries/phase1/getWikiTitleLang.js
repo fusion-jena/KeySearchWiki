@@ -9,7 +9,7 @@ const BLACKLIST = new Set([ 'commonswiki', 'specieswiki', 'metawiki', 'sourceswi
 
 export default function getWikiTitleLang( entry ) {
 
-  // Q59542487 ... "Wikimedia set category"
+  // e.g, Q59542487 ... "Wikimedia set category"
   if( !entry._isSetCat ) {
     return;
   }

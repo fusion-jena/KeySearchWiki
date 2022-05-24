@@ -5,6 +5,10 @@ const Config = {
   // enable/disable sending requests to endpoint
   endpointEnabled: false,
 
+  // IRI of the source categories
+  // Wikimedia set categories (Q59542487), Wikimedia categories (Q4167836)
+  categoryIRI: 'Q59542487',
+
   // maximum parallel queries
   maxParallelQueries:   5,
 

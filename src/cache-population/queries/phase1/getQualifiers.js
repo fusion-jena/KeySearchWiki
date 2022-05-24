@@ -6,7 +6,7 @@ const cache = new Cache('qualifiers', 'iri') ;
 
 export default function getQualifiers( entry ) {
 
-  // Q59542487 ... "Wikimedia set category"
+  // e.g, Q59542487 ... "Wikimedia set category"
   if( !entry._isSetCat ) {
     return;
   }
