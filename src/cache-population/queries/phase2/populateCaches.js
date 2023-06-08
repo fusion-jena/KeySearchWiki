@@ -46,25 +46,22 @@ export default async function populateCaches(grouped){
     //console.log(`-> ${lang}:`);
     wikipediaCachePopLog.info(`-> ${lang}:`);
     let t0 = performance.now();
-    if(lang != 'en'){
-      for(let table of Config.tables){
-        const { stdout } = await exec(`zcat ${Config.preImport} ${Config.dumpLocation}${lang}/${lang}wiki-${Config.dumpDate}-${table} ${Config.postImport} | mysql -u '${Config.user}' -p${Config.password} ${Config.databaseName}`);
-        if(stdout == ''){
+    for(let table of Config.tables){
+      const { stdout } = await exec(`zcat ${Config.dumpLocation}${lang}/${lang}wiki-${Config.dumpDate}-${table} | mysql -u '${Config.user}' -p${Config.password} ${Config.databaseName}`);
+      if(stdout == ''){
         //console.log(`   ${table} imported !`);
-          wikipediaCachePopLog.info(`   ${table} imported !`);
-        }
-        else{
-        //console.log(stdout);
-          errorLog.write(`{lang:${lang}, table:${table}, error:${stdout} }`);
-          errorLog.write('\r\n');
-        }
+        wikipediaCachePopLog.info(`   ${table} imported !`);
       }
-
-
-      let t1 = performance.now();
-      timeLog.write(`{action: import , lang: ${lang}, time: ${(t1 - t0) / 1000}}`);
-      timeLog.write('\r\n');
+      else{
+        //console.log(stdout);
+        errorLog.write(`{lang:${lang}, table:${table}, error:${stdout} }`);
+        errorLog.write('\r\n');
+      }
     }
+
+    let t1 = performance.now();
+    timeLog.write(`{action: import , lang: ${lang}, time: ${(t1 - t0) / 1000}}`);
+    timeLog.write('\r\n');
 
     // for progress tracking
     let numberCats = grouped[lang].length;
@@ -115,7 +112,7 @@ export default async function populateCaches(grouped){
 
           if(pageidspage.length > 0){
 
-          //allow only pageids of namespace = 0 => main page (noticed that also e.g., ns = 10 is considered as 'page')
+            //allow only pageids of namespace = 0 => main page (noticed that also e.g., ns = 10 is considered as 'page')
             let namespaces = await mariadb.getNS(conn, pageidspage);
 
             namespaces.forEach(ns => {

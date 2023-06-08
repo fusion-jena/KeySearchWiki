@@ -4,7 +4,7 @@ import { cachePopLog as Log } from './../util/logger';
 import { isInstanceOf } from './util';
 import groupByLang from './queries/phase2/groupByLang';
 import getCatsTarget from './queries/phase2/getCatsTarget';
-import download from './queries/phase2/download';
+import downloadAll from './queries/phase2/downloadAll';
 import populateCaches from './queries/phase2/populateCaches';
 
 import Glob from 'glob-promise';
@@ -107,19 +107,19 @@ import Zlib from 'zlib';
   let grouped = await groupByLang(catToTarget.exclude , catToTarget.catToTarget);
 
   //download wikipedia dump tables for all languages
-  await download(grouped.langList.both);
+  await downloadAll(grouped.langList.both);
 
 
   Log.info( '---------------- Phase 2 (Wikipedia cache population) ----------------' );
 
-  let grouped = JSON.parse(Fs.readFileSync(CacheConfig.catGroupedBylang));
+  let group = JSON.parse(Fs.readFileSync(CacheConfig.catGroupedBylang));
 
   //just temporary to avoid importing english language (put it in the beginning of grouped object)
   /*let temp = grouped['en'];
   delete grouped.en;
   let newgrouped = Object.assign({en: temp}, grouped);*/
 
-  await populateCaches(grouped);
+  await populateCaches(group);
 
 
   /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX Third Phase XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */

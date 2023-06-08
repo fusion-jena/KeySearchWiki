@@ -34,8 +34,6 @@ export default {
   downloadError: path.join(__dirname,'..', '..','wikipedia-dump/download-error-log.json'),
   wikidataDumpLangList: path.join(__dirname,'..', '..','wikipedia-dump/wd-lang-list.json'),
   catGroupedBylang: path.join(__dirname,'..', '..','wikipedia-dump/cat-by-lang.json'),
-  postImport: path.join(__dirname,'..', '..','wikipedia-dump/postimport.sql.gz'),
-  preImport: path.join(__dirname,'..', '..','wikipedia-dump/preimport.sql.gz'),
   maxValues: 10000
 
 };
