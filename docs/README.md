@@ -38,13 +38,12 @@ For 43 out of 66 queries, at least half of the entities that appear in KeySearch
 
 In general, the results demonstrate a high *Recall* overall.
 The main reason for queries with lower *Recall* comes down to the fact that some results found by the SPARQL-queries cannot be found in the corresponding Wikipedia category page nor its hierarchy.
-Since the overall *Precision* provides a rather mixed picture, we conducted a more detailed investigation into possible reasons (items that were found in Wikipedia but not by SPARQL).
-The reasons are shortly listed in the following:
+Since the overall *Precision* provides a rather mixed picture, we conducted a more detailed investigation into possible reasons (items that were found in Wikipedia but not by SPARQL) that are shortly listed in the following:
 - **Different property value**: The SPARQL query may use a property value different from the one present on a KeySearchWiki relevant entity.
 - **Missing property**: Some entities retrieved from Wikipedia are not sufficiently annotated
 - **Usage of another property**: Some entities contain the correct value, but use a different property than the one used in the SPARQL query.
 
-For more details refer to [L. Feddoul, F. Löffler, S. Schindler, Analysis of consistency between wikidata and wikipedia
+For more details about the different reasons refer to [L. Feddoul, F. Löffler, S. Schindler, Analysis of consistency between wikidata and wikipedia
 categories, in: Proceedings of the 3rd Wikidata Workshop 2022 co-located with the 21st
 International Semantic Web Conference (ISWC2022)](https://ceur-ws.org/Vol-3262/paper4.pdf)
 
