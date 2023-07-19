@@ -157,9 +157,9 @@ The parameters used to perform Filtering (see Workflow) could be set in the foll
 * [Multi-keyword queries config](https://github.com/fusion-jena/KeySearchWiki/blob/master/src/complex-queries-generation/multi-keyword/config.js)
 * [Native-queries config](https://github.com/fusion-jena/KeySearchWiki/blob/master/src/post-processing/config.js)
 
-:red_circle: **Remark**
+#### Remark
 
-*Note that since the 06th March 2022, the Wikidata "Wikimedia set categories (Q59542487)" were merged with their initially superclasses "Wikimedia categories (Q4167836)"*.
+:red_circle: *Note that since the 06th March 2022, the Wikidata "Wikimedia set categories (Q59542487)" were merged with their initially superclasses "Wikimedia categories (Q4167836)"*.
 *This was done by redirecting the "Wikimedia set categories (Q59542487)" to the latter entity.*\
 *While the generation of the current dataset version is reproducible, generating new datasets based on "Wikimedia set categories (Q59542487)" will be only possible on Wikidata Dump/Endpoints based on versions released before 2022-03-06, where the differentiation between the two types was still existing.*
 *Theoretically, to generate a new dataset using the general "Wikimedia categories (Q4167836)" from any Dump/Endpoint version, one should only adjust the entity IRI in the corresponding project global config file ([categoryIRI](https://github.com/fusion-jena/KeySearchWiki/blob/master/src/config/config.js#L10)).*\
