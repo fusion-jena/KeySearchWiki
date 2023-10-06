@@ -338,4 +338,4 @@ Detailed analysis of the results can be found [here](https://github.com/fusion-j
 <!---## Cite , consider updating codemeta with paper link and also zenodo metadata-->
 
 ## License
-This project is licensed under the [MIT License](https://fusion.cs.uni-jena.de/git/xi75yod/kwsearch-goldstandard-generation-wikidata/-/blob/master/LICENSE).
+This project is licensed under the [MIT License](https://github.com/fusion-jena/KeySearchWiki/blob/master/LICENSE).
